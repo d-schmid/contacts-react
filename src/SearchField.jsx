@@ -6,17 +6,17 @@ function SearchField(props) {
   const [searchInput, setSearchInput] = useState('');
   const onSearch$ = useMemo(() => new Subject().pipe(debounceTime(500)), []);
 
-
+  const { updateSearchString } = props;
   useEffect(() => {
-      const subscription = onSearch$.subscribe(debounced => {
-        props.updateSearchString(debounced);
-      });
+    const subscription = onSearch$.subscribe(debounced => {
+      updateSearchString(debounced);
+    });
     return () => {
       if (subscription) {
         subscription.unsubscribe();
       }
     };
-  }, []);
+  }, [onSearch$, updateSearchString]);
 
   const onSearch = e => {
     const search = e.target.value;
@@ -26,9 +26,8 @@ function SearchField(props) {
 
   return (
     <div>
-      <input id="search" name='search' placeholder='search' value={searchInput} onChange={onSearch} />
+      <input id="search" name="search" placeholder="search" value={searchInput} onChange={onSearch} />
     </div>
-
   );
 }
 
