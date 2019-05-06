@@ -1,16 +1,10 @@
 import React from 'react';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-
-const onSearch$ = new Subject().pipe(
-  debounceTime(300)
-);
+import SearchField from './SearchField';
 
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchInput: '',
       debouncedSearch: '',
       contacts: [
         { id: 1, firstname: 'Daniel', lastname: 'Schmid' },
@@ -19,33 +13,15 @@ class ContactList extends React.Component {
     };
   }
 
-  componentDidMount(){
-    this.subscription = onSearch$.subscribe(
-      debounced => this.setState({ debouncedSearch: debounced })
-    );
+  handleSearchChange = (searchString)=>{
+    this.setState({debouncedSearch: searchString});
   }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  onSearch = (e) => {
-    const search = e.target.value;
-    this.setState({ searchInput: search });
-    onSearch$.next(search);
-  };
 
   render() {
-    const { contacts, searchInput, debouncedSearch } = this.state;
+    const { contacts, debouncedSearch } = this.state;
     return (
       <div className="Contact-list">
-        <label htmlFor="search">
-          Search
-          <input id="search" value={searchInput} onChange={this.onSearch} />
-        </label>
-
+        <SearchField updateSearchString={this.handleSearchChange}/>
         <ul>
           {contacts
             .filter(i => {
