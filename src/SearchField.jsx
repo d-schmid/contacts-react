@@ -4,15 +4,13 @@ import { debounceTime } from 'rxjs/operators';
 
 function SearchField(props) {
   const [searchInput, setSearchInput] = useState('');
-  const onSearch$ = useMemo(() => new Subject().pipe(debounceTime(3000)), []);
+  const onSearch$ = useMemo(() => new Subject().pipe(debounceTime(500)), []);
 
-  let subscription;
+
   useEffect(() => {
-    if (!subscription) {
-      subscription = onSearch$.subscribe(debounced => {
+      const subscription = onSearch$.subscribe(debounced => {
         props.updateSearchString(debounced);
       });
-    }
     return () => {
       if (subscription) {
         subscription.unsubscribe();
@@ -27,10 +25,10 @@ function SearchField(props) {
   };
 
   return (
-    <label htmlFor="search">
-      Search
-      <input id="search" value={searchInput} onChange={onSearch} />
-    </label>
+    <div>
+      <input id="search" name='search' placeholder='search' value={searchInput} onChange={onSearch} />
+    </div>
+
   );
 }
 

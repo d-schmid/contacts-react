@@ -1,40 +1,59 @@
 import React from 'react';
 import SearchField from './SearchField';
 
+const API_URL = 'http://localhost:3000';
+
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      debouncedSearch: '',
-      contacts: [
-        { id: 1, firstname: 'Daniel', lastname: 'Schmid' },
-        { id: 2, firstname: 'Daniel', lastname: 'Brönnimann' }
-      ]
+      contacts: []
     };
   }
 
-  handleSearchChange = (searchString)=>{
-    this.setState({debouncedSearch: searchString});
+  componentWillMount() {
+    fetch(`${API_URL}/contacts?_page=1&_limit=20`)
+      .then(response => response.json())
+      .then(responseData => {
+        this.setState({ contacts: responseData });
+      })
+      .catch(() => {
+        this.setState({ contacts: [] });
+      });
   }
 
+  handleSearchChange = searchString => {
+    if (searchString === '') {
+      this.setState({ contacts: [] });
+      return;
+    }
+    fetch(`${API_URL}/contacts?displayname_like=${searchString}`)
+      .then(response => response.json())
+      .then(responseData => {
+        this.setState({ contacts: responseData });
+      });
+  };
+
   render() {
-    const { contacts, debouncedSearch } = this.state;
+    const { contacts } = this.state;
     return (
       <div className="Contact-list">
-        <SearchField updateSearchString={this.handleSearchChange}/>
+        <SearchField updateSearchString={this.handleSearchChange} />
         <ul>
           {contacts
-            .filter(i => {
-              const name = (`${i.firstname} ${i.lastname}` || '').toLowerCase();
-              const searchString = (debouncedSearch || '').toLowerCase();
-              return name.startsWith(searchString);
+            .sort(function(a, b) {
+              const nameA = a.displayname.toUpperCase();
+              const nameB = b.displayname.toUpperCase();
+              if (nameA < nameB) {
+                return -1;
+              }
+              if (nameA > nameB) {
+                return 1;
+              }
+              return 0;
             })
             .map(item => {
-              return (
-                <li key={item.id}>
-                  {item.firstname} {item.lastname}
-                </li>
-              );
+              return <li key={item.id}>{item.displayname}</li>;
             })}
         </ul>
       </div>
