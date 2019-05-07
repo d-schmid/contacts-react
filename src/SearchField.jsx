@@ -3,7 +3,7 @@ import { useDebounce } from './hooks';
 
 function SearchField(props) {
   const {updateSearchString} = props;
-  const [searchInput, searchInputDisplay, setSearchInputDisplay] = useDebounce('');
+  const [searchInput, searchInputDisplay, setSearchInputDisplay] = useDebounce('', 500);
   useEffect(() => updateSearchString(searchInput), [searchInput, updateSearchString])
   const onSearch = e => setSearchInputDisplay(e.target.value);
   return (
