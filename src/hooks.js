@@ -2,12 +2,12 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { useState, useEffect, useMemo } from 'react';
 
-export function useDebounce(initialState) {
+export function useDebounce(initialState, timeout = 500) {
 
   const [displayValue, setDisplayValue] = useState(initialState);
   const [value, setValue] = useState(initialState);
 
-  const values$ = useMemo(() => new Subject().pipe(debounceTime(500)), []);
+  const values$ = useMemo(() => new Subject().pipe(debounceTime(timeout)), [timeout]);
   useEffect(() => {
     const subscription = values$.subscribe(debouncedValue => {
       setValue(debouncedValue)
