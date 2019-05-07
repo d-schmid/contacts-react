@@ -1,17 +1,25 @@
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/js/all';
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ContactList from './ContactList';
+import ContactDetail from './ContactDetail';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">Learn React
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-
-      <ContactList />
-    </div>
+    <section className="section">
+      <div className="container">
+        <div className="columns">
+          <div className="column is-4">
+            <ContactList/>
+          </div>
+          <div className="column">
+            <ContactDetail/>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
