@@ -27,12 +27,13 @@ class ContactList extends React.Component {
   }
 
   handleSearchChange = searchString => {
-    if (searchString === '') {
+    const searchStringClean = searchString.trim();
+    if (searchStringClean === '') {
       this.setState({ contacts: [] });
       return;
     }
 
-    const fetch$ = from(fetch(`${API_URL}/contacts?displayname_like=${searchString}`)).pipe(
+    const fetch$ = from(fetch(`${API_URL}/contacts?displayname_like=${searchStringClean}`)).pipe(
       flatMap(response => response.json())
     );
     fetch$.subscribe({
@@ -62,9 +63,9 @@ class ContactList extends React.Component {
 
     const contactElements = contacts.sort(this.sortName).map(item => {
       return (
-        <a key={item.id} className="panel-block" href={'/contact/' + item.id}>
+        <a key={item.id} className="panel-block" href={`/contact/${item.id}`}>
           <span className="panel-icon">
-              <i className="fas fa-user" aria-hidden="true"></i>
+              <i className="fas fa-user" aria-hidden="true"/>
           </span>
           {item.displayname}
         </a>
