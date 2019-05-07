@@ -15,7 +15,7 @@
     "eject": "react-scripts eject",
     "prettier": "prettier \"{,!(node_modules)/**/}*{.js,jsx,.html,.css,.json}\" --write",
     "run-json-server": "json-server --watch db.json",
-    "wp": "webpack"
+    "lint": "eslint --ext .jsx --ext .js src/"
   },
   "eslintConfig": {
     "extends": "react-app"

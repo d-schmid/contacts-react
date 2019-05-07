@@ -1,41 +1,71 @@
 import React from 'react';
+import { from } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 import SearchField from './SearchField';
+
+const API_URL = 'http://localhost:3000';
 
 class ContactList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      debouncedSearch: '',
-      contacts: [
-        { id: 1, firstname: 'Daniel', lastname: 'Schmid' },
-        { id: 2, firstname: 'Daniel', lastname: 'Brönnimann' }
-      ]
+      contacts: []
     };
   }
 
-  handleSearchChange = (searchString)=>{
-    this.setState({debouncedSearch: searchString});
+  componentWillMount() {
+    const fetch$ = from(fetch(`${API_URL}/contacts?_page=1&_limit=20`)).pipe(flatMap(response => response.json()));
+
+    fetch$.subscribe({
+      next: data => {
+        this.setState({ contacts: data });
+      },
+      error: () => {
+        this.setState({ contacts: [] });
+      }
+    });
   }
 
+  handleSearchChange = searchString => {
+    if (searchString === '') {
+      this.setState({ contacts: [] });
+      return;
+    }
+
+    const fetch$ = from(fetch(`${API_URL}/contacts?displayname_like=${searchString}`)).pipe(
+      flatMap(response => response.json())
+    );
+    fetch$.subscribe({
+      next: data => {
+        this.setState({ contacts: data });
+      },
+      error: () => {
+        this.setState({ contacts: [] });
+      }
+    });
+  };
+
+  sortName = (a, b) => {
+    const nameA = a.displayname.toUpperCase();
+    const nameB = b.displayname.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  };
+
   render() {
-    const { contacts, debouncedSearch } = this.state;
+    const { contacts } = this.state;
     return (
       <div className="Contact-list">
-        <SearchField updateSearchString={this.handleSearchChange}/>
+        <SearchField updateSearchString={this.handleSearchChange} />
         <ul>
-          {contacts
-            .filter(i => {
-              const name = (`${i.firstname} ${i.lastname}` || '').toLowerCase();
-              const searchString = (debouncedSearch || '').toLowerCase();
-              return name.startsWith(searchString);
-            })
-            .map(item => {
-              return (
-                <li key={item.id}>
-                  {item.firstname} {item.lastname}
-                </li>
-              );
-            })}
+          {contacts.sort(this.sortName).map(item => {
+            return <li key={item.id}>{item.displayname}</li>;
+          })}
         </ul>
       </div>
     );

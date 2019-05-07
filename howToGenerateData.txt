@@ -1,0 +1,13 @@
+https://www.json-generator.com/#
+
+[
+  '{{repeat(100, 100)}}',
+  {
+    id: '{{objectId()}}',
+    firstname: '{{firstName()}}',
+    lastname: '{{surname()}}',
+	displayname: function (tags) {
+      return this.firstname + ' ' + this.lastname;
+}
+  }
+]
