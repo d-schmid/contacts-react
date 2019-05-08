@@ -6,11 +6,7 @@ function SearchField(props) {
   const [searchInput, searchInputDisplay, setSearchInputDisplay] = useDebounce('', 500);
   useEffect(() => updateSearchString(searchInput), [searchInput, updateSearchString])
   const onSearch = e => setSearchInputDisplay(e.target.value);
-  return (
-    <div>
-      <input id="search" name="search" placeholder="search" value={searchInputDisplay} onChange={onSearch} />
-    </div>
-  );
+  return <input id="search" className="input" name="search" placeholder="search" value={searchInputDisplay} onChange={onSearch} />;
 }
 
 export default SearchField;
