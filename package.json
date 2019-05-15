@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.2",
+    "@reach/router": "^1.2.1",
     "bulma": "^0.7.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -16,7 +17,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier \"{,!(node_modules)/**/}*{.js,jsx,.html,.css,.json}\" --write",
-    "run-json-server": "json-server --watch db.json",
+    "backend": "json-server --watch db.json --port 3333",
     "lint": "eslint --ext .jsx --ext .js src/"
   },
   "eslintConfig": {
