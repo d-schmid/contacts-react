@@ -2,8 +2,9 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/js/all';
 import React from 'react';
 import './App.css';
-import ContactList from './ContactList';
-import ContactDetail from './ContactDetail';
+import ContactList from './components/ContactList';
+import ContactDetail from './components/ContactDetail';
+import { Router } from '@reach/router';
 
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
             <ContactList/>
           </div>
           <div className="column">
-            <ContactDetail/>
+            <Router>
+              <ContactDetail path="contacts/:id"/>
+            </Router>
           </div>
         </div>
       </div>

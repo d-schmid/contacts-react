@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs/index';
+import { debounceTime } from 'rxjs/operators/index';
 import { useState, useEffect, useMemo } from 'react';
 
 export function useDebounce(initialState, timeout = 500) {

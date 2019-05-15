@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { useDebounce } from './hooks';
+import { useDebounce } from '../util/hooks';
 
 function SearchField(props) {
   const {updateSearchString} = props;

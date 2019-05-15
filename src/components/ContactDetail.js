@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import contactsService from '../services/ContactsService';
 
 const ContactDetail = (props) => {
+  const id = props.id;
+  const [contact, setContact] = useState(null);
+
+  useEffect(() => {
+    const subscription = contactsService.subscibeToContact(id, c => setContact(c));
+    return () => subscription.unsubscribe();
+  }, [id]);
+
+  console.log(contact);
+  if (!contact) {
+    return null;
+  }
+
+  const mail = contact.firstname.toLowerCase() + '@mail.com';
+
   return (
     <div className="card">
       <div className="card-content">
@@ -11,9 +27,9 @@ const ContactDetail = (props) => {
             </figure>
           </div>
           <div className="media-content">
-            <p className="title is-4">John Smith</p>
+            <p className="title is-4">{contact.displayname}</p>
             <p className="subtitle is-6">
-              <a href="mailto:test@test.com">john.smith@mail.com</a>
+              <a href={`mailto:${mail}`}>{mail}</a>
             </p>
           </div>
         </div>
